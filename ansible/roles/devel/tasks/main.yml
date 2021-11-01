@@ -1,0 +1,6 @@
+---
+- name: install designer packages
+  with_items: '{{ designer_packages }}'
+  package:
+    name: '{{ item.name }}'
+    state: latest
