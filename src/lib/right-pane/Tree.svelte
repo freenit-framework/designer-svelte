@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { design } from '$lib/store'
+  import { dndzone } from 'svelte-dnd-action'
+  import { design, rearrange } from '$lib/store'
   import TreeItem from './TreeItem.svelte'
 
   function handleDnd(event) {
@@ -7,11 +8,24 @@
   }
 </script>
 
-<div class="root" on:consider={handleDnd} on:finalize={handleDnd}>
-  {#each $design as data (data.id)}
-    <TreeItem bind:data />
-  {/each}
-</div>
+{#if $rearrange}
+  <div
+    class="root"
+    on:consider={handleDnd}
+    on:finalize={handleDnd}
+    use:dndzone={{ items: $design }}
+  >
+    {#each $design as data (data.id)}
+      <TreeItem bind:data />
+    {/each}
+  </div>
+{:else}
+  <div class="root">
+    {#each $design as data (data.id)}
+      <TreeItem bind:data />
+    {/each}
+  </div>
+{/if}
 
 <style>
   .root {

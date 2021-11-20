@@ -1,7 +1,14 @@
 <script lang="ts">
-  import { selected } from '$lib/store'
+  import { design, selected } from '$lib/store'
 
-  export let data = {}
+  export let data = {
+    id: null,
+    name: '',
+    children: [],
+  }
+  export let parent = {
+    children: $design,
+  }
   let hidden = true
   $: outline = $selected && $selected.id === data.id
   $: icon = hidden ? 'v' : 'A'
@@ -13,6 +20,17 @@
   function select() {
     $selected = data
   }
+
+  function remove() {
+    if ($selected.id === data.id) {
+      $selected = { id: null }
+    }
+    if (parent.children === $design) {
+      $design = $design.filter((item) => item.id !== data.id)
+    } else {
+      parent.children = parent.children.filter((item) => item.id !== data.id)
+    }
+  }
 </script>
 
 {#if !data.id.startsWith('id:dnd-shadow-placeholder')}
@@ -22,11 +40,12 @@
         <div>{data.name.toLowerCase()}</div>
         <div class="subtitle">{data.id}</div>
       </div>
-      <div class="open" on:click={toggleOpen}>{icon}</div>
+      <div class="action" on:click={remove}>x</div>
+      <div class="action" on:click={toggleOpen}>{icon}</div>
     </div>
     <div class="content" class:hidden>
       {#each data.children as child (child.id)}
-        <svelte:self bind:data={child} />
+        <svelte:self bind:data={child} bind:parent={data} />
       {/each}
     </div>
   </div>
@@ -60,7 +79,7 @@
     color: #777;
   }
 
-  .open {
+  .action {
     margin-right: 10px;
   }
 

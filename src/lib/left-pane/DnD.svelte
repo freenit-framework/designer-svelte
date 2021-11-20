@@ -26,7 +26,7 @@
   }
 
   function handleDndFinalize(event) {
-    items = event.detal.items
+    items = event.detail.items
   }
 
   function changeSearch(event) {

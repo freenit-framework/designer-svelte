@@ -1,6 +1,6 @@
 <script lang="ts">
   import { dndzone } from 'svelte-dnd-action'
-  import { design } from '$lib/store'
+  import { design, rearrange } from '$lib/store'
   import Component from './Component.svelte'
 
   function handleDnd(event) {
@@ -8,16 +8,24 @@
   }
 </script>
 
-<section
-  class="root"
-  use:dndzone={{ items: $design }}
-  on:consider={handleDnd}
-  on:finalize={handleDnd}
->
-  {#each $design as item (item.id)}
-    <Component bind:item />
-  {/each}
-</section>
+{#if $rearrange}
+  <section class="root">
+    {#each $design as item (item.id)}
+      <Component bind:item />
+    {/each}
+  </section>
+{:else}
+  <section
+    class="root"
+    use:dndzone={{ items: $design }}
+    on:consider={handleDnd}
+    on:finalize={handleDnd}
+  >
+    {#each $design as item (item.id)}
+      <Component bind:item />
+    {/each}
+  </section>
+{/if}
 
 <style>
   .root {
