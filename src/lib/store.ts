@@ -1,4 +1,6 @@
 import { writable } from 'svelte/store'
 
 export const design = writable([])
-export const selected = writable({})
+export const selected = writable({
+  id: null
+})

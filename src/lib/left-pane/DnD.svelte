@@ -1,7 +1,7 @@
 <script lang="ts">
   import { flip } from 'svelte/animate'
   import { dndzone, TRIGGERS } from 'svelte-dnd-action'
-  import htmlnames from '$lib/html-components'
+  import htmlnames from '$lib/components'
   import { makeid } from '$lib/utils'
 
   let search = ''
@@ -26,7 +26,7 @@
   }
 
   function handleDndFinalize(event) {
-    items = event.detail.items
+    items = event.detal.items
   }
 
   function changeSearch(event) {

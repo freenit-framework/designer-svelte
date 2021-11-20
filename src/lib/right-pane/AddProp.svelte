@@ -4,7 +4,7 @@
 
   let name = ''
   let value = ''
-  export let open: boolean = false
+  export let open = false
   export let data = {}
 
   function addProp() {
@@ -27,6 +27,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-autofocus -->
 <Modal {open}>
   <form on:submit|preventDefault={addProp}>
     <label for="name">Name</label>

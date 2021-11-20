@@ -2,7 +2,7 @@
   import AddProp from './AddProp.svelte'
   import { isSimple } from '$lib/utils'
 
-  export let data: any
+  export let data = { name: '' }
   export let name = ''
   let hover = false
   let add = false

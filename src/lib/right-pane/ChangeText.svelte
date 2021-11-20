@@ -17,6 +17,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-autofocus -->
 <Modal {open}>
   <form on:submit|preventDefault={close}>
     <label for="text">Text</label>
