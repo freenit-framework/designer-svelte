@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dndzone } from 'svelte-dnd-action'
+  import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
   import { design, rearrange } from '$lib/store'
   import TreeItem from './TreeItem.svelte'
 
@@ -15,14 +15,14 @@
     on:finalize={handleDnd}
     use:dndzone={{ items: $design }}
   >
-    {#each $design as data (data.id)}
-      <TreeItem bind:data />
+    {#each $design.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
+      <TreeItem bind:data={item} />
     {/each}
   </div>
 {:else}
   <div class="root">
-    {#each $design as data (data.id)}
-      <TreeItem bind:data />
+    {#each $design.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
+      <TreeItem bind:data={item} />
     {/each}
   </div>
 {/if}

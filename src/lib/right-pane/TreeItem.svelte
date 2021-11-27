@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
   import { design, selected } from '$lib/store'
 
   export let data = {
@@ -33,23 +34,21 @@
   }
 </script>
 
-{#if !data.id.startsWith('id:dnd-shadow-placeholder')}
-  <div class="root" on:click|stopPropagation={select} class:outline>
-    <div class="bar">
-      <div class="titles">
-        <div>{data.name.toLowerCase()}</div>
-        <div class="subtitle">{data.id}</div>
-      </div>
-      <div class="action" on:click={remove}>x</div>
-      <div class="action" on:click={toggleOpen}>{icon}</div>
+<div class="root" on:click|stopPropagation={select} class:outline>
+  <div class="bar">
+    <div class="titles">
+      <div>{data.name.toLowerCase()}</div>
+      <div class="subtitle">{data.id}</div>
     </div>
-    <div class="content" class:hidden>
-      {#each data.children as child (child.id)}
-        <svelte:self bind:data={child} bind:parent={data} />
-      {/each}
-    </div>
+    <div class="action" on:click={remove}>x</div>
+    <div class="action" on:click={toggleOpen}>{icon}</div>
   </div>
-{/if}
+  <div class="content" class:hidden>
+    {#each data.children.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
+      <svelte:self bind:data={item} bind:parent={data} />
+    {/each}
+  </div>
+</div>
 
 <style>
   .root {

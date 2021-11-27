@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
   import { selected } from '$lib/store'
 
-  export let item = {
+  export let data = {
     id: '',
     component: '',
     props: {},
@@ -10,25 +11,23 @@
     text: '',
   }
   $: style = {
-    ...item.style,
+    ...data.style,
     cursor: 'grab',
     'user-select': 'none',
-    'border-width': $selected.id === item.id ? '1px' : '0px',
+    'border-width': $selected.id === data.id ? '1px' : '0px',
     'border-color': 'black',
     'border-style': 'dotted',
   }
 </script>
 
-{#if !item.id.startsWith('id:dnd-shadow-placeholder')}
-  <svelte:component
-    this={item.component}
-    props={item.props}
-    bind:items={item.children}
-    bind:style
-  >
-    {item.text}
-    {#each item.children as child}
-      <svelte:self item={child} />
-    {/each}
-  </svelte:component>
-{/if}
+<svelte:component
+  this={data.component}
+  props={data.props}
+  bind:items={data.children}
+  bind:style
+>
+  {data.text}
+  {#each data.children.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
+    <svelte:self bind:data={item} />
+  {/each}
+</svelte:component>

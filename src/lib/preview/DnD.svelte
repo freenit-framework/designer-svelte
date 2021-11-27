@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dndzone } from 'svelte-dnd-action'
+  import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
   import { design, rearrange } from '$lib/store'
   import Component from './Component.svelte'
 
@@ -10,8 +10,8 @@
 
 {#if $rearrange}
   <section class="root">
-    {#each $design as item (item.id)}
-      <Component bind:item />
+    {#each $design as data (data.id)}
+      <Component bind:data />
     {/each}
   </section>
 {:else}
@@ -21,8 +21,8 @@
     on:consider={handleDnd}
     on:finalize={handleDnd}
   >
-    {#each $design as item (item.id)}
-      <Component bind:item />
+    {#each $design.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
+      <Component bind:data={item} />
     {/each}
   </section>
 {/if}
