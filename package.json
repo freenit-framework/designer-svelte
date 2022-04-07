@@ -37,7 +37,6 @@
     "@lukeed/uuid": "^2.0.0",
     "@mdi/js": "^6.6.96",
     "chota": "^0.8.0",
-    "cookie": "^0.4.1",
-    "svelte-dnd-action": "^0.9.18"
+    "cookie": "^0.4.1"
   }
 }

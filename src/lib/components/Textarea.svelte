@@ -1,22 +1,11 @@
 <script lang="ts">
-  import { dndzone } from 'svelte-dnd-action'
   import { prepareStyle } from '$lib/utils'
 
   export let style = {}
-  export let items = []
 
   $: s = prepareStyle(style)
-
-  function handleDnd(event) {
-    items = event.detail.items
-  }
 </script>
 
-<textarea
-  style={s}
-  use:dndzone={{ items }}
-  on:consider={handleDnd}
-  on:finalize={handleDnd}
->
+<textarea style={s}>
   <slot />
 </textarea>

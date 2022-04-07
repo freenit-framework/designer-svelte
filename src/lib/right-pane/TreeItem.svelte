@@ -1,14 +1,28 @@
 <script lang="ts">
-  import { SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
-  import { design, selected } from '$lib/store'
+  import { slide } from 'svelte/transition'
+  import { selected } from '$lib/store'
+  import { dragStart, dragEnd, drop } from '$lib/utils'
+  import type { Component } from '$lib/types'
+  import DnDWrapper from './DnDWrapper.svelte'
 
-  export let data = {
-    id: null,
+  export let index: number
+  export let data: Component = {
+    id: '',
+    component: '',
     name: '',
+    text: '',
     children: [],
+    props: {},
+    style: {},
   }
-  export let parent = {
-    children: $design,
+  export let parent: Component = {
+    id: '',
+    component: '',
+    name: '',
+    text: '',
+    children: [],
+    props: {},
+    style: {},
   }
   let hidden = true
   $: outline = $selected && $selected.id === data.id
@@ -23,32 +37,37 @@
   }
 
   function remove() {
-    if ($selected.id === data.id) {
-      $selected = { id: null }
-    }
-    if (parent.children === $design) {
-      $design = $design.filter((item) => item.id !== data.id)
-    } else {
-      parent.children = parent.children.filter((item) => item.id !== data.id)
-    }
+    parent.children = parent.children.filter((item) => item.id !== data.id)
   }
 </script>
 
-<div class="root" on:click|stopPropagation={select} class:outline>
-  <div class="bar">
-    <div class="titles">
-      <div>{data.name.toLowerCase()}</div>
-      <div class="subtitle">{data.id}</div>
+<DnDWrapper bind:data bind:parent {index}>
+  <div
+    class="root"
+    on:click|stopPropagation={select}
+    class:outline
+    transition:slide
+    draggable="true"
+    on:dragstart={dragStart(data)}
+    on:dragend={dragEnd}
+    on:drop={drop(data)}
+    ondragover="return false"
+  >
+    <div class="bar">
+      <div class="titles">
+        <div>{data.name.toLowerCase()}</div>
+        <div class="subtitle">{data.id}</div>
+      </div>
+      <div class="action" on:click|stopPropagation={remove}>x</div>
+      <div class="action" on:click|stopPropagation={toggleOpen}>{icon}</div>
     </div>
-    <div class="action" on:click={remove}>x</div>
-    <div class="action" on:click={toggleOpen}>{icon}</div>
+    <div class="content" class:hidden>
+      {#each data.children as item, index (item.id)}
+        <svelte:self bind:data={item} bind:parent={data} {index} />
+      {/each}
+    </div>
   </div>
-  <div class="content" class:hidden>
-    {#each data.children.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
-      <svelte:self bind:data={item} bind:parent={data} />
-    {/each}
-  </div>
-</div>
+</DnDWrapper>
 
 <style>
   .root {
