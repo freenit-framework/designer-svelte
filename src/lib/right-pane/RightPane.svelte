@@ -1,8 +1,14 @@
 <script lang="ts">
-  import { rearrange } from '$lib/store'
   import Tree from './Tree.svelte'
   import Props from './Props.svelte'
-  import { mdiRedo, mdiUndo, mdiCellphone, mdiTablet, mdiLaptop } from '@mdi/js'
+  import {
+    mdiRedo,
+    mdiUndo,
+    mdiCellphone,
+    mdiTablet,
+    mdiLaptop,
+    mdiMenu,
+  } from '@mdi/js'
 
   function undo() {
     console.log('undo')
@@ -23,23 +29,9 @@
   function computer() {
     console.log('computer')
   }
-
-  function doRearrange() {
-    $rearrange = true
-  }
-
-  function noRearrange() {
-    $rearrange = false
-  }
 </script>
 
-<div
-  class="root"
-  on:mouseover={doRearrange}
-  on:focus={doRearrange}
-  on:mouseleave={noRearrange}
-  on:blur={noRearrange}
->
+<div class="root">
   <div class="panel">
     <button class="button outline" disabled>Props</button>
     <button class="button outline">Theme</button>

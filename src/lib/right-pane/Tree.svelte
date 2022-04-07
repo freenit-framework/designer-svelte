@@ -1,31 +1,14 @@
 <script lang="ts">
-  import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
-  import { design, rearrange } from '$lib/store'
+  import { design } from '$lib/store'
+  import { drop } from '$lib/utils'
   import TreeItem from './TreeItem.svelte'
-
-  function handleDnd(event) {
-    $design = event.detail.items
-  }
 </script>
 
-{#if $rearrange}
-  <div
-    class="root"
-    on:consider={handleDnd}
-    on:finalize={handleDnd}
-    use:dndzone={{ items: $design }}
-  >
-    {#each $design.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
-      <TreeItem bind:data={item} />
-    {/each}
-  </div>
-{:else}
-  <div class="root">
-    {#each $design.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
-      <TreeItem bind:data={item} />
-    {/each}
-  </div>
-{/if}
+<div class="root" on:drop={drop($design)} ondragover="return false">
+  {#each $design.children as item, index (item.id)}
+    <TreeItem bind:data={item} bind:parent={$design} {index} />
+  {/each}
+</div>
 
 <style>
   .root {

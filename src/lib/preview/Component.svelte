@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
   import { selected } from '$lib/store'
 
   export let data = {
@@ -27,7 +26,7 @@
   bind:style
 >
   {data.text}
-  {#each data.children.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
+  {#each data.children as item (item.id)}
     <svelte:self bind:data={item} />
   {/each}
 </svelte:component>
