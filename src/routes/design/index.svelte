@@ -12,7 +12,6 @@
   <LeftPane />
   <Preview />
   <RightPane />
-  <slot />
 </section>
 
 <style>
