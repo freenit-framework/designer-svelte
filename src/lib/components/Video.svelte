@@ -7,6 +7,7 @@
   $: s = prepareStyle(style)
 </script>
 
+<!-- svelte-ignore a11y-media-has-caption -->
 <video {...props} style={s}>
   <slot />
 </video>

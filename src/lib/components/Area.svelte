@@ -7,4 +7,4 @@
   $: s = prepareStyle(style)
 </script>
 
-<area {...props} style={s} />
+<area {...props} alt={props.alt} style={s} />

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { prepareStyle } from '$lib/utils'
 
-  export let props = {}
+  export const props = {}
   export let style = {}
 
   $: s = prepareStyle(style)

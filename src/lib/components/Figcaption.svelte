@@ -7,6 +7,7 @@
   $: s = prepareStyle(style)
 </script>
 
+<!-- svelte-ignore a11y-structure -->
 <figcaption {...props} style={s}>
   <slot />
 </figcaption>
