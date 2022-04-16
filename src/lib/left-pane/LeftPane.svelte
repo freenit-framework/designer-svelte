@@ -1,10 +1,17 @@
 <script lang="ts">
   import DnD from './DnD.svelte'
-  import { toJson, toObject } from '$lib/utils'
+  import {
+    exportCode,
+    exportStyle,
+    exportText,
+    toJson,
+    toObject,
+  } from '$lib/utils'
   import { design } from '$lib/store'
   import { Base64 } from 'js-base64'
 
   let saveDownload: string | null = null
+  let exportDownload: string | null = null
   let fileInput: any
 
   function save() {
@@ -12,6 +19,15 @@
     const saveOut = toJson($design)
     const json = JSON.stringify(saveOut)
     saveDownload = `data:application/json;base64,${Base64.encode(json)}`
+  }
+
+  function exporter() {
+    exportDownload = null
+    const text = $design.children.map((c) => exportText(c)).join()
+    const children = $design.children.map((c) => exportCode(c)).join()
+    const style = $design.children.map((c) => exportStyle(c)).join()
+    const code = `\<script lang="ts"\>\n  const data = {${text}\n  }\n\</script\>\n\n${children}\n\<style\>\n${style}\</style\>\n`
+    exportDownload = `data:application/json;base64,${Base64.encode(code)}`
   }
 
   function load() {
@@ -47,7 +63,15 @@
       Save
     </a>
     <button class="button outline primary" on:click={load}>Load</button>
-    <button class="button outline">Export</button>
+    <a
+      class="button outline"
+      on:mouseover={exporter}
+      on:focus={exporter}
+      href={exportDownload}
+      download="page.svelte"
+    >
+      Export
+    </a>
   </div>
 </div>
 

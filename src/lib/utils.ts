@@ -115,3 +115,39 @@ export function toObject(json: string): Component {
   const obj = JSON.parse(json)
   return object2component(obj)
 }
+
+export function exportProps(props: Record<string, any>): string {
+  let ret = ''
+  for (const prop in props) {
+    ret += ` ${prop}="${props[prop]}"`
+  }
+  return ret
+}
+
+export function exportStyle(component: Component): string {
+  let ret = `  .${component.id} {`
+  for (const s in component.style) {
+    ret += `\n    ${s}: ${component.style[s]};`
+  }
+  ret += '\n  }\n'
+  ret += component.children.map((c) => exportStyle(c)).join()
+  return ret
+}
+
+export function exportText(component: Component): string {
+  let ret = `\n    ${component.id}: "${component.text}",`
+  ret += component.children.map((c) => exportText(c)).join()
+  return ret
+}
+
+export function exportCode(component: Component, prefix = ''): string {
+  const element = component.name.toLowerCase()
+  let ret = `${prefix}<${element} class="${component.id}"`
+  ret += exportProps(component.props)
+  ret += `>\n`
+  const children = component.children.map((c) => exportCode(c, `${prefix}  `))
+  ret += children.join()
+  ret += `${prefix}  {data[${component.id}]}\n`
+  ret += `${prefix}</${element}>\n`
+  return ret
+}
