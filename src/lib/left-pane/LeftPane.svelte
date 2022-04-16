@@ -1,5 +1,17 @@
 <script lang="ts">
   import DnD from './DnD.svelte'
+  import { toJson } from '$lib/utils'
+  import { design } from '$lib/store'
+  import { Base64 } from 'js-base64'
+
+  let saveDownload: string | null = null
+
+  function save() {
+    saveDownload = null
+    const saveOut = toJson($design)
+    const json = JSON.stringify(saveOut)
+    saveDownload = `data:application/json;base64,${Base64.encode(json)}`
+  }
 </script>
 
 <div class="root">
@@ -9,7 +21,16 @@
   </div>
   <DnD />
   <div class="buttons">
-    <button class="button outline">Save</button>
+    <a href={saveDownload} download="design.json">
+      <button
+        class="button outline"
+        on:mouseover={save}
+        on:focus={save}
+        disabled={saveDownload === null}
+      >
+        Save
+      </button>
+    </a>
     <button class="button outline primary">Load</button>
     <button class="button outline">Export</button>
   </div>

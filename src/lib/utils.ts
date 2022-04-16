@@ -84,3 +84,15 @@ export function dragEnter(component: Component) {
 export function dragLeave() {
   over.set({ ...initialComponent })
 }
+
+export function toJson(component: Component) {
+  const { id, name, props, style, children, text } = component
+  return {
+    id,
+    name,
+    text,
+    props,
+    style,
+    children: children.map((c) => toJson(c)),
+  }
+}
