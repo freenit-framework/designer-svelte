@@ -1,6 +1,7 @@
 import { get } from 'svelte/store'
 import type { Component } from '$lib/types'
 import { design, dnd, over, initialComponent } from '$lib/store'
+import * as components from '$lib/components/components'
 
 export function makeid(length = 8): string {
   let result = ''
@@ -95,4 +96,22 @@ export function toJson(component: Component) {
     style,
     children: children.map((c) => toJson(c)),
   }
+}
+
+function object2component(obj: Record<string, any>): Component {
+  const { id, name, style, props, text, children } = obj
+  return {
+    id,
+    name,
+    style,
+    props,
+    text,
+    component: components[obj.name] || '',
+    children: children.map((c: Component) => object2component(c)),
+  }
+}
+
+export function toObject(json: string): Component {
+  const obj = JSON.parse(json)
+  return object2component(obj)
 }

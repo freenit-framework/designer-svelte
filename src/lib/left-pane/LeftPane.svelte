@@ -1,16 +1,32 @@
 <script lang="ts">
   import DnD from './DnD.svelte'
-  import { toJson } from '$lib/utils'
+  import { toJson, toObject } from '$lib/utils'
   import { design } from '$lib/store'
   import { Base64 } from 'js-base64'
 
   let saveDownload: string | null = null
+  let fileInput: any
 
   function save() {
     saveDownload = null
     const saveOut = toJson($design)
     const json = JSON.stringify(saveOut)
     saveDownload = `data:application/json;base64,${Base64.encode(json)}`
+  }
+
+  function load() {
+    fileInput.click()
+  }
+
+  function handleFile(event: any) {
+    if (event.target.files.length > 0) {
+      const [file] = event.target.files
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        $design = toObject(`${e.target.result}`)
+      }
+      reader.readAsText(file)
+    }
   }
 </script>
 
@@ -21,20 +37,27 @@
   </div>
   <DnD />
   <div class="buttons">
-    <a href={saveDownload} download="design.json">
-      <button
-        class="button outline"
-        on:mouseover={save}
-        on:focus={save}
-        disabled={saveDownload === null}
-      >
-        Save
-      </button>
+    <a
+      class="button outline"
+      on:mouseover={save}
+      on:focus={save}
+      href={saveDownload}
+      download="design.json"
+    >
+      Save
     </a>
-    <button class="button outline primary">Load</button>
+    <button class="button outline primary" on:click={load}>Load</button>
     <button class="button outline">Export</button>
   </div>
 </div>
+
+<input
+  style="display: none"
+  type="file"
+  accept=".json"
+  bind:this={fileInput}
+  on:change={handleFile}
+/>
 
 <style>
   .root {
