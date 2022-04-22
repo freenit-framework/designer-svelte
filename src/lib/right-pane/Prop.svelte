@@ -1,6 +1,6 @@
 <script lang="ts">
   import AddProp from './AddProp.svelte'
-  import { isSimple } from '$lib/utils'
+  import { isSimple, isObject } from '$lib/utils/props'
 
   export let data = { name: '' }
   export let name = ''
@@ -21,7 +21,11 @@
   }
 
   function remove() {
-    delete data[name]
+    if (Array.isArray(data)) {
+      data.splice(Number(name), 1)
+    } else {
+      delete data[name]
+    }
     data = data
   }
 
@@ -42,10 +46,14 @@
       on:mouseleave={leaveRemove}
       on:blur={leaveRemove}
     >
-      {name}: {data[name]}
+      {#if Array.isArray(data)}
+        {data[name].value}
+      {:else}
+        {name}: {data[name].value}
+      {/if}
       <span class="tool" class:hover={removeHover} on:click={remove}>-</span>
     </span>
-  {:else}
+  {:else if isObject(data[name])}
     <span
       on:mouseover={setHover}
       on:focus={setHover}
@@ -56,10 +64,25 @@
       <span class="tool" class:hover on:click={openAdd}>+</span>
       <span class="tool" class:hover on:click={remove}>-</span>
     </span>
-    {#each Object.keys(data[name]) as propname}
-      <svelte:self bind:data={data[name]} name={propname} />
+    {#each Object.keys(data[name].value) as propname}
+      <svelte:self bind:data={data[name].value} name={propname} />
     {/each}
     <div>&#125;</div>
+  {:else if Array.isArray(data[name].value)}
+    <span
+      on:mouseover={setHover}
+      on:focus={setHover}
+      on:mouseleave={unsetHover}
+      on:blur={unsetHover}
+    >
+      {name}: [
+      <span class="tool" class:hover on:click={openAdd}>+</span>
+      <span class="tool" class:hover on:click={remove}>-</span>
+    </span>
+    {#each data[name].value as _value, index}
+      <svelte:self bind:data={data[name].value} name={index} />
+    {/each}
+    <div>]</div>
   {/if}
 </div>
 

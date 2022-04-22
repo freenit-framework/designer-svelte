@@ -11,7 +11,7 @@
   let addStyle: boolean = false
   let text: boolean = false
 
-  function setHover(type) {
+  function setHover(type: string) {
     function inner() {
       if (type === 'props') {
         hover = true
@@ -22,7 +22,7 @@
     return inner
   }
 
-  function unsetHover(type) {
+  function unsetHover(type: string) {
     function inner() {
       if (type === 'props') {
         hover = false
@@ -57,8 +57,8 @@
       props: &#123;
       <span class="add" class:hover on:click={openAdd}>+</span>
     </span>
-    {#each Object.keys($selected.props) as name}
-      <Prop bind:data={$selected.props} {name} />
+    {#each Object.keys($selected.props.value) as name}
+      <Prop bind:data={$selected.props.value} {name} />
     {/each}
     <div>&#125;</div>
     <div

@@ -1,14 +1,9 @@
 <script lang="ts">
   import Tree from './Tree.svelte'
   import Props from './Props.svelte'
-  import {
-    mdiRedo,
-    mdiUndo,
-    mdiCellphone,
-    mdiTablet,
-    mdiLaptop,
-    mdiMenu,
-  } from '@mdi/js'
+  import { mdiRedo, mdiUndo, mdiCellphone, mdiTablet, mdiLaptop } from '@mdi/js'
+
+  let green = true
 
   function undo() {
     console.log('undo')
@@ -29,12 +24,21 @@
   function computer() {
     console.log('computer')
   }
+
+  function theme() {
+    green = !green
+    if (green) {
+      document.documentElement.style.setProperty('--color-primary', '#14854F')
+    } else {
+      document.documentElement.style.setProperty('--color-primary', '#da1d50')
+    }
+  }
 </script>
 
 <div class="root">
   <div class="panel">
     <button class="button outline" disabled>Props</button>
-    <button class="button outline">Theme</button>
+    <button class="button outline" on:click={theme}>Theme</button>
   </div>
   <div class="tools">
     <svg class="icon" on:click={undo}>

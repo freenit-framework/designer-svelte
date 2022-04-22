@@ -1,10 +1,11 @@
 <script lang="ts">
   import { selected } from '$lib/store'
+  import { compile, decompile } from '$lib/utils/props'
 
   export let data = {
     id: '',
     component: '',
-    props: {},
+    props: compile({}),
     style: {},
     children: [],
     text: '',
@@ -19,7 +20,11 @@
   }
 </script>
 
-<svelte:component this={data.component} props={data.props} bind:style>
+<svelte:component
+  this={data.component}
+  props={decompile(data.props)}
+  bind:style
+>
   {data.text}
   {#each data.children as item (item.id)}
     <svelte:self bind:data={item} />

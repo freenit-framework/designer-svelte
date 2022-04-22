@@ -1,22 +1,23 @@
 <script lang="ts">
   import { design } from '$lib/store'
+  import { compile } from '$lib/utils/props'
   import Modal from '$lib/Modal.svelte'
 
   let name = ''
   let value = ''
   export let open = false
-  export let data = {}
+  export let data = compile({})
 
   function addProp() {
     if (name === 'style') {
       return
     }
     if (value === '{}') {
-      data[name] = {}
+      data[name] = compile({})
     } else if (value === '[]') {
-      data[name] = []
+      data[name] = compile([])
     } else {
-      data[name] = value
+      data[name] = compile(value)
     }
     open = false
     $design = $design

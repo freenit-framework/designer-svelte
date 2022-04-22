@@ -12,14 +12,6 @@ export function makeid(length = 8): string {
   return result
 }
 
-export function isSimple(data: any): boolean {
-  return (
-    typeof data === 'number' ||
-    typeof data === 'boolean' ||
-    typeof data === 'string'
-  )
-}
-
 export function prepareStyle(
   style: Record<string, boolean | string | number | null>,
 ) {
