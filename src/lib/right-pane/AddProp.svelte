@@ -17,7 +17,7 @@
     } else if (value === '[]') {
       data[name] = compile([])
     } else {
-      data[name] = compile(value)
+      data.value[name] = compile(value)
     }
     open = false
     $design = $design

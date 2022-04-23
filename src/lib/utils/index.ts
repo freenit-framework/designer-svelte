@@ -2,6 +2,7 @@ import { get } from 'svelte/store'
 import type { Component } from '$lib/types'
 import { design, dnd, over, initialComponent } from '$lib/store'
 import * as components from '$lib/components/components'
+import { decompile } from './props'
 
 export function makeid(length = 8): string {
   let result = ''
@@ -135,7 +136,7 @@ export function exportText(component: Component): string {
 export function exportCode(component: Component, prefix = ''): string {
   const element = component.name.toLowerCase()
   let ret = `${prefix}<${element} class="${component.id}"`
-  ret += exportProps(component.props)
+  ret += exportProps(decompile(component.props))
   ret += `>\n`
   const children = component.children.map((c) => exportCode(c, `${prefix}  `))
   ret += children.join()

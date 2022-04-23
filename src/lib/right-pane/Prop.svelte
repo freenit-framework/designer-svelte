@@ -86,7 +86,7 @@
   {/if}
 </div>
 
-<AddProp bind:open={add} bind:data={data[name]} />
+<AddProp bind:open={add} bind:data />
 
 <style>
   .root {
