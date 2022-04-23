@@ -91,7 +91,7 @@ export function toJson(component: Component) {
   }
 }
 
-function object2component(obj: Record<string, any>): Component {
+export function object2component(obj: Record<string, any>): Component {
   const { id, name, style, props, text, children } = obj
   return {
     id,
