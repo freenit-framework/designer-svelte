@@ -1,6 +1,6 @@
 import { get } from 'svelte/store'
 import type { Component } from '$lib/types'
-import { design, dnd, over, initialComponent } from '$lib/store'
+import { design, dnd, over, initialComponent, theme } from '$lib/store'
 import * as components from '$lib/components/components'
 import { decompile } from './props'
 
@@ -143,4 +143,9 @@ export function exportCode(component: Component, prefix = ''): string {
   ret += `${prefix}  {data[${component.id}]}\n`
   ret += `${prefix}</${element}>\n`
   return ret
+}
+
+export function setThemeProp(key: string, value: string) {
+  document.documentElement.style.setProperty(`--${key}`, value)
+  theme.update(t => ({ ...t, key: value }))
 }

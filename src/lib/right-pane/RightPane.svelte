@@ -1,9 +1,10 @@
 <script lang="ts">
   import Tree from './Tree.svelte'
   import Props from './Props.svelte'
+  import Theme from './Theme.svelte'
   import { mdiRedo, mdiUndo, mdiCellphone, mdiTablet, mdiLaptop } from '@mdi/js'
 
-  let green = true
+  let tab = 'props'
 
   function undo() {
     console.log('undo')
@@ -25,33 +26,48 @@
     console.log('computer')
   }
 
+  function props() {
+    tab = 'props'
+  }
+
   function theme() {
-    green = !green
-    if (green) {
-      document.documentElement.style.setProperty('--color-primary', '#14854F')
-    } else {
-      document.documentElement.style.setProperty('--color-primary', '#da1d50')
-    }
+    tab = 'theme'
   }
 </script>
 
 <div class="root">
   <div class="panel">
-    <button class="button outline" disabled>Props</button>
-    <button class="button outline" on:click={theme}>Theme</button>
+    <button class="button outline" disabled={tab === 'props'} on:click={props}>
+      Props
+    </button>
+    <button class="button outline" disabled={tab === 'theme'} on:click={theme}>
+      Theme
+    </button>
   </div>
-  <div class="tools">
-    <svg class="icon" on:click={undo}>
-      <path d={mdiUndo} />
-    </svg>
-    <svg class="icon" on:click={redo}>
-      <path d={mdiRedo} />
-    </svg>
-  </div>
-  <div class="content">
-    <Tree />
-    <Props />
-  </div>
+  {#if tab === 'props'}
+    <div class="tools">
+      <svg class="icon" on:click={undo}>
+        <path d={mdiUndo} />
+      </svg>
+      <svg class="icon" on:click={redo}>
+        <path d={mdiRedo} />
+      </svg>
+    </div>
+    <div class="content">
+      <Tree />
+      <Props />
+    </div>
+  {:else if tab === 'theme'}
+    <div class="tools">
+      <svg class="icon" on:click={undo}>
+        <path d={mdiUndo} />
+      </svg>
+      <svg class="icon" on:click={redo}>
+        <path d={mdiRedo} />
+      </svg>
+    </div>
+    <Theme />
+  {/if}
   <div class="buttons">
     <svg class="icon" on:click={mobile}>
       <path d={mdiCellphone} />

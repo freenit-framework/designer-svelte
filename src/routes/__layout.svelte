@@ -1,6 +1,15 @@
 <script lang="ts">
   import 'chota'
   import '../app.css'
+  import { onMount } from 'svelte'
+  import { theme } from '$lib/store'
+  import { setThemeProp } from '$lib/utils'
+
+  onMount(() => {
+    for (const item of Object.keys($theme)) {
+      setThemeProp(item, $theme[item])
+    }
+  })
 </script>
 
 <svelte:head>
