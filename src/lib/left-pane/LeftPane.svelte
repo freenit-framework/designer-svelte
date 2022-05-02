@@ -28,9 +28,9 @@
 
   function exporter() {
     exportDownload = null
-    const text = $design.children.map((c) => exportText(c)).join()
-    const children = $design.children.map((c) => exportCode(c)).join()
-    const style = $design.children.map((c) => exportStyle(c)).join()
+    const text = $design.children.map((c) => exportText(c)).join('')
+    const children = $design.children.map((c) => exportCode(c)).join('')
+    const style = $design.children.map((c) => exportStyle(c)).join('\n')
     const scriptData = `\<script lang="ts"\>\n  const data = {${text}\n  }\n\<\/script\>`
     const childrenData = `\n\n${children}\n`
     let globalStyle = `  :global(:root) {\n`
