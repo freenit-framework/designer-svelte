@@ -147,5 +147,5 @@ export function exportCode(component: Component, prefix = ''): string {
 
 export function setThemeProp(key: string, value: string) {
   document.documentElement.style.setProperty(`--${key}`, value)
-  theme.update(t => ({ ...t, key: value }))
+  theme.update(t => ({ ...t, [key]: value }))
 }

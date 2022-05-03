@@ -8,7 +8,7 @@ export const initialComponent = {
   text: '',
   children: [],
   props: compile({}),
-  style: {},
+  style: compile({}),
 }
 
 export const design = writable({ ...initialComponent, id: 'root' })

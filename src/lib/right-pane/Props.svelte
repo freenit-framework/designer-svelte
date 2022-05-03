@@ -71,8 +71,8 @@
       <span class="add" class:hover={styleHover} on:click={openAddStyle}>+</span
       >
     </div>
-    {#each Object.keys($selected.style) as name}
-      <StyleProp bind:data={$selected.style} {name} />
+    {#each Object.keys($selected.style.value) as name}
+      <StyleProp bind:data={$selected.style.value} {name} />
     {/each}
     <div>&#125;</div>
     <div on:click={openText}>text: {$selected.text}</div>

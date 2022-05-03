@@ -6,12 +6,12 @@
     id: '',
     component: '',
     props: compile({}),
-    style: {},
+    style: compile({}),
     children: [],
     text: '',
   }
   $: style = {
-    ...data.style,
+    ...decompile(data.style),
     cursor: 'grab',
     'user-select': 'none',
     'border-width': $selected.id === data.id ? '1px' : '0px',
@@ -20,11 +20,7 @@
   }
 </script>
 
-<svelte:component
-  this={data.component}
-  props={decompile(data.props)}
-  bind:style
->
+<svelte:component this={data.component} props={decompile(data.props)} {style}>
   {data.text}
   {#each data.children as item (item.id)}
     <svelte:self bind:data={item} />

@@ -3,7 +3,7 @@
 
   export let name = ''
   let newname = name
-  export let data = {}
+  export let data = { name: '' }
   const value = data[name]
   let editing = null
   let hover: boolean = false
@@ -57,7 +57,7 @@
       </form>
     {:else if editing === 'value'}
       <form on:submit|preventDefault={edit(null)}>
-        <input bind:value={data[name]} />
+        <input bind:value={data[name].value} />
         <button type="submit" class="button outline primary">OK</button>
         <button class="button outline secondary" on:click={cancel}>
           Cancel
@@ -71,7 +71,7 @@
         on:blur={unhoverProp}
       >
         <span on:click={edit('name')}>{name}</span>:
-        <span on:click={edit('value')}>{data[name]}</span>
+        <span on:click={edit('value')}>{data[name].value}</span>
         <span class="tool" class:hover on:click={remove}>-</span>
       </div>
     {/if}

@@ -8,7 +8,7 @@ const htmlcomponents = Object.keys(components).map((name) => ({
   component: components[name],
   children: [],
   props: compile({}),
-  style: {},
+  style: compile({}),
   text: '',
 }))
 
