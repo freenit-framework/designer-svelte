@@ -34,6 +34,7 @@
     "@mdi/js": "^6.7.96",
     "chota": "^0.8.0",
     "cookie": "^0.4.1",
-    "js-base64": "^3.7.2"
+    "js-base64": "^3.7.2",
+    "svelte-color-picker": "^1.0.7"
   }
 }
