@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store'
 import { compile } from './utils/props'
+import type { UndoItem } from '$lib/types'
 
 export const initialComponent = {
   id: null,
@@ -31,3 +32,8 @@ export const theme = writable({
   'font-family-sans': '',
   'font-family-mono': 'monaco, Consolas, Lucida Console, monospace',
 })
+
+const undoArray: UndoItem[] = []
+const redoArray: UndoItem[] = []
+export const undo = writable(undoArray)
+export const redo = writable(redoArray)

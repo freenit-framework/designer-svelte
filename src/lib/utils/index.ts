@@ -1,6 +1,6 @@
 import { get } from 'svelte/store'
-import type { Component } from '$lib/types'
-import { design, dnd, over, initialComponent, theme } from '$lib/store'
+import type { Component, UndoItem } from '$lib/types'
+import { design, dnd, over, initialComponent, theme, undo } from '$lib/store'
 import * as components from '$lib/components/components'
 import { decompile } from './props'
 
@@ -54,7 +54,14 @@ export function drop(component: Component, index: number = -1) {
     event.stopPropagation()
     event.preventDefault()
     const existing = get(dnd)
+    const undoStore = get(undo)
     const newone = changeIds(existing)
+    const undoItem: UndoItem = {
+      parent: component,
+      attribute: 'children',
+      value: component.children,
+    }
+    undoStore.push(undoItem)
     if (index === -1) {
       component.children = [...component.children, newone]
     } else {
@@ -147,5 +154,5 @@ export function exportCode(component: Component, prefix = ''): string {
 
 export function setThemeProp(key: string, value: string) {
   document.documentElement.style.setProperty(`--${key}`, value)
-  theme.update(t => ({ ...t, [key]: value }))
+  theme.update((t) => ({ ...t, [key]: value }))
 }

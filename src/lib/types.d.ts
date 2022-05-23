@@ -15,3 +15,13 @@ export interface Component {
   style: Record<any, boolean | string | number | null>
   text: string
 }
+
+export interface UndoItem {
+  parent: Component
+  attribute: string
+  value: any
+}
+
+export interface Prop {
+  name: string
+}

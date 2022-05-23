@@ -3,16 +3,9 @@
   import Props from './Props.svelte'
   import Theme from './Theme.svelte'
   import { mdiRedo, mdiUndo, mdiCellphone, mdiTablet, mdiLaptop } from '@mdi/js'
+  import { undo, redo } from '$lib/undo'
 
   let tab = 'props'
-
-  function undo() {
-    console.log('undo')
-  }
-
-  function redo() {
-    console.log('redo')
-  }
 
   function mobile() {
     console.log('mobile')

@@ -2,7 +2,6 @@
   import { design } from '$lib/store'
   import { compile } from '$lib/utils/props'
   import Modal from '$lib/Modal.svelte'
-  import { HsvPicker } from 'svelte-color-picker'
 
   let name: string = ''
   let value: any = ''
@@ -29,11 +28,6 @@
   function close() {
     open = false
   }
-
-  function colorChange(rgba: any) {
-    const { r, g, b, a } = rgba.detail
-    value = `rgba(${r}, ${g}, ${b}, ${a})`
-  }
 </script>
 
 <!-- svelte-ignore a11y-autofocus -->
@@ -56,8 +50,7 @@
     {:else if type === 'boolean'}
       <input name="value" type="checkbox" bind:value required />
     {:else if type === 'color'}
-      <!-- <input name="value" type="color" bind:value required /> -->
-      <HsvPicker on:colorChange={colorChange} />
+      <input name="value" type="color" bind:value required />
     {/if}
     <div class="buttons">
       <button type="submit" class="button outline primary">OK</button>

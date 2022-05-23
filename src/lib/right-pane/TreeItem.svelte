@@ -2,8 +2,9 @@
   import { slide } from 'svelte/transition'
   import { selected } from '$lib/store'
   import { dragStart, dragEnd, drop } from '$lib/utils'
-  import type { Component } from '$lib/types'
+  import type { Component, UndoItem } from '$lib/types'
   import DnDWrapper from './DnDWrapper.svelte'
+  import { undo } from '$lib/store'
 
   export let index: number
   export let data: Component = {
@@ -37,6 +38,12 @@
   }
 
   function remove() {
+    const item: UndoItem = {
+      parent,
+      attribute: 'children',
+      value: parent.children,
+    }
+    $undo = [...$undo, item]
     parent.children = parent.children.filter((item) => item.id !== data.id)
   }
 </script>
