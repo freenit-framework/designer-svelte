@@ -1,9 +1,11 @@
 <script lang="ts">
   import AddProp from './AddProp.svelte'
   import { isSimple, isObject } from '$lib/utils/props'
+  import { undo } from '$lib/store'
+  import type { UndoItem } from '$lib/types'
 
   export let data = { name: '' }
-  export let name = ''
+  export let name: string | number = ''
   let hover = false
   let add = false
   let removeHover = false
@@ -21,6 +23,12 @@
   }
 
   function remove() {
+    const item: UndoItem = {
+      parent: data,
+      attribute: name,
+      value: data[name],
+    }
+    $undo = [...$undo, item]
     if (Array.isArray(data)) {
       data.splice(Number(name), 1)
     } else {
@@ -38,53 +46,55 @@
   }
 </script>
 
-<div class="root">
-  {#if isSimple(data[name])}
-    <span
-      on:mouseover={hoverRemove}
-      on:focus={hoverRemove}
-      on:mouseleave={leaveRemove}
-      on:blur={leaveRemove}
-    >
-      {#if Array.isArray(data)}
-        {data[name].value}
-      {:else}
-        {name}: {data[name].value}
-      {/if}
-      <span class="tool" class:hover={removeHover} on:click={remove}>-</span>
-    </span>
-  {:else if isObject(data[name])}
-    <span
-      on:mouseover={setHover}
-      on:focus={setHover}
-      on:mouseleave={unsetHover}
-      on:blur={unsetHover}
-    >
-      {name}: &#123;
-      <span class="tool" class:hover on:click={openAdd}>+</span>
-      <span class="tool" class:hover on:click={remove}>-</span>
-    </span>
-    {#each Object.keys(data[name].value) as propname}
-      <svelte:self bind:data={data[name].value} name={propname} />
-    {/each}
-    <div>&#125;</div>
-  {:else if Array.isArray(data[name].value)}
-    <span
-      on:mouseover={setHover}
-      on:focus={setHover}
-      on:mouseleave={unsetHover}
-      on:blur={unsetHover}
-    >
-      {name}: [
-      <span class="tool" class:hover on:click={openAdd}>+</span>
-      <span class="tool" class:hover on:click={remove}>-</span>
-    </span>
-    {#each data[name].value as _value, index}
-      <svelte:self bind:data={data[name].value} name={index} />
-    {/each}
-    <div>]</div>
-  {/if}
-</div>
+{#if Boolean(name) && data[name] !== undefined}
+  <div class="root">
+    {#if isSimple(data[name])}
+      <span
+        on:mouseover={hoverRemove}
+        on:focus={hoverRemove}
+        on:mouseleave={leaveRemove}
+        on:blur={leaveRemove}
+      >
+        {#if Array.isArray(data)}
+          {data[name].value}
+        {:else}
+          {name}: {data[name].value}
+        {/if}
+        <span class="tool" class:hover={removeHover} on:click={remove}>-</span>
+      </span>
+    {:else if isObject(data[name])}
+      <span
+        on:mouseover={setHover}
+        on:focus={setHover}
+        on:mouseleave={unsetHover}
+        on:blur={unsetHover}
+      >
+        {name}: &#123;
+        <span class="tool" class:hover on:click={openAdd}>+</span>
+        <span class="tool" class:hover on:click={remove}>-</span>
+      </span>
+      {#each Object.keys(data[name].value) as propname}
+        <svelte:self bind:data={data[name].value} name={propname} />
+      {/each}
+      <div>&#125;</div>
+    {:else if Array.isArray(data[name].value)}
+      <span
+        on:mouseover={setHover}
+        on:focus={setHover}
+        on:mouseleave={unsetHover}
+        on:blur={unsetHover}
+      >
+        {name}: [
+        <span class="tool" class:hover on:click={openAdd}>+</span>
+        <span class="tool" class:hover on:click={remove}>-</span>
+      </span>
+      {#each data[name].value as _value, index}
+        <svelte:self bind:data={data[name].value} name={index} />
+      {/each}
+      <div>]</div>
+    {/if}
+  </div>
+{/if}
 
 <AddProp bind:open={add} bind:data />
 

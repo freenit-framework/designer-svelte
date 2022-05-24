@@ -17,8 +17,8 @@ export interface Component {
 }
 
 export interface UndoItem {
-  parent: Component
-  attribute: string
+  parent: any
+  attribute: string | number
   value: any
 }
 

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { design } from '$lib/store'
+  import { design, undo } from '$lib/store'
   import { compile } from '$lib/utils/props'
   import Modal from '$lib/Modal.svelte'
+  import type { UndoItem } from '$lib/types'
 
   let name: string = ''
   let value: any = ''
@@ -14,12 +15,30 @@
       return
     }
     if (value === '{}') {
+      const item: UndoItem = {
+        parent: data,
+        attribute: name,
+        value: data[name],
+      }
+      $undo = [...$undo, item]
       data[name] = compile({})
     } else if (value === '[]') {
+      const item: UndoItem = {
+        parent: data,
+        attribute: name,
+        value: data[name],
+      }
+      $undo = [...$undo, item]
       data[name] = compile([])
     } else {
+      const item: UndoItem = {
+        parent: data.value,
+        attribute: name,
+        value: data.value[name],
+      }
       data.value[name] = compile(value)
       data.value[name].type = type
+      $undo = [...$undo, item]
     }
     open = false
     $design = $design
