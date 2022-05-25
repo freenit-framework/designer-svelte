@@ -1,5 +1,6 @@
 <script lang="ts">
   import AddProp from './AddProp.svelte'
+  import InlineEdit from './InlineEdit.svelte'
   import { isSimple, isObject } from '$lib/utils/props'
   import { undo } from '$lib/store'
   import type { UndoItem } from '$lib/types'
@@ -9,6 +10,7 @@
   let hover = false
   let add = false
   let removeHover = false
+  let editing = false
 
   function setHover() {
     hover = true
@@ -44,16 +46,27 @@
   function leaveRemove() {
     removeHover = false
   }
+
+  function edit() {
+    editing = true
+  }
+
+  function closeEdit() {
+    editing = false
+  }
 </script>
 
 {#if Boolean(name) && data[name] !== undefined}
   <div class="root">
-    {#if isSimple(data[name])}
+    {#if editing}
+      <InlineEdit {data} bind:name onClose={closeEdit} />
+    {:else if isSimple(data[name])}
       <span
         on:mouseover={hoverRemove}
         on:focus={hoverRemove}
         on:mouseleave={leaveRemove}
         on:blur={leaveRemove}
+        on:click={edit}
       >
         {#if Array.isArray(data)}
           {data[name].value}
