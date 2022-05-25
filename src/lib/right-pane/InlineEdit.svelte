@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { UndoItem } from '$lib/types'
-  import { undo } from '$lib/store'
+  import { design, theme, undo } from '$lib/store'
 
   export let onClose: any
   export let data: Record<string, any> = { attribute: { value: '' } }
@@ -14,6 +14,8 @@
       value: data[name].value,
     }
     data[name].value = value
+    $design = $design
+    $theme = $theme
     $undo = [...$undo, item]
     onClose()
   }

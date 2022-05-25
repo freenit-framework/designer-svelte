@@ -3,6 +3,7 @@ import { get } from 'svelte/store'
 import {
   design,
   selected,
+  theme,
   undo as undoStore,
   redo as redoStore,
 } from '$lib/store'
@@ -25,6 +26,7 @@ export function undo() {
     redoStore.set(storeredo)
     design.set(get(design))
     selected.set(get(selected))
+    theme.set(get(theme))
   }
 }
 

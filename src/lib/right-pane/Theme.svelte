@@ -2,36 +2,28 @@
 <script lang="ts">
   import { theme } from '$lib/store'
   import { setThemeProp } from '$lib/utils'
+  import InlineEdit from './InlineEdit.svelte'
 
   let editing: string | null = null
-  let oldValue: string | null = null
 
-  const edit = (prop: string) => () => {
+  function edit(prop: string) {
     editing = prop
-    oldValue = $theme[prop]
   }
 
   function change() {
-    setThemeProp(editing, $theme[editing])
-    editing = null
-  }
-
-  function cancel() {
-    $theme[editing] = oldValue
+    if (editing) {
+      setThemeProp(editing, $theme.value[editing].value)
+    }
     editing = null
   }
 </script>
 
 <div class="root">
-  {#each Object.keys($theme) as prop}
+  {#each Object.keys($theme.value) as prop}
     {#if editing === prop}
-      <form on:submit|preventDefault={change}>
-        <input bind:value={$theme[prop]} autofocus />
-        <button class="button" type="submit">OK</button>
-        <button class="button" on:click={cancel}>Cancel</button>
-      </form>
+      <InlineEdit data={$theme.value} name={prop} onClose={change} />
     {:else}
-      <div on:click={edit(prop)}>{prop}: {$theme[prop]}</div>
+      <div on:click={edit(prop)}>{prop}: {$theme.value[prop].value}</div>
     {/if}
   {/each}
 </div>
