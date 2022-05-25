@@ -1,19 +1,19 @@
 <script lang="ts">
   import type { UndoItem } from '$lib/types'
-  import { undo } from '$lib/store'
+  import { design, undo } from '$lib/store'
 
   export let onClose: any
-  export let data: Record<string, any> = { attribute: { value: '' } }
-  export let name = 'attribute'
-  let { value } = data[name]
+  export let data: Record<string, any> = { text: '' }
+  let value = data.text
 
   function submit() {
     const item: UndoItem = {
-      parent: data[name],
-      attribute: 'value',
-      value: data[name].value,
+      parent: data,
+      attribute: 'text',
+      value,
     }
-    data[name].value = value
+    data.text = value
+    $design = $design
     $undo = [...$undo, item]
     onClose()
   }
@@ -22,8 +22,8 @@
 <!-- svelte-ignore a11y-autofocus -->
 <div class="root">
   <form on:submit|preventDefault={submit}>
-    <label for="value" class="label">{name}:</label>
-    <input required autofocus name="value" bind:value />
+    <label for="value" class="label">text:</label>
+    <input autofocus name="value" bind:value />
     <div class="buttons">
       <button class="button outline primary">OK</button>
       <button class="button outline secondary" on:click={onClose}>

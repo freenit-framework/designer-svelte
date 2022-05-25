@@ -1,9 +1,8 @@
 <script lang="ts">
   import { selected } from '$lib/store'
   import AddProp from './AddProp.svelte'
-  import ChangeText from './ChangeText.svelte'
+  import TextEdit from './TextEdit.svelte'
   import Prop from './Prop.svelte'
-  import StyleProp from './StyleProp.svelte'
 
   let hover = false
   let styleHover = false
@@ -44,6 +43,10 @@
   function openText() {
     text = true
   }
+
+  function closeText() {
+    text = false
+  }
 </script>
 
 <div class="root">
@@ -72,16 +75,19 @@
       >
     </div>
     {#each Object.keys($selected.style.value) as name}
-      <StyleProp bind:data={$selected.style.value} {name} />
+      <Prop bind:data={$selected.style.value} {name} />
     {/each}
     <div>&#125;</div>
-    <div on:click={openText}>text: {$selected.text}</div>
+    {#if text}
+      <TextEdit data={$selected} onClose={closeText} />
+    {:else}
+      <div on:click={openText}>text: {$selected.text}</div>
+    {/if}
   {/if}
 </div>
 
 <AddProp bind:open={add} bind:data={$selected.props} />
 <AddProp bind:open={addStyle} bind:data={$selected.style} />
-<ChangeText bind:open={text} bind:value={$selected.text} />
 
 <style>
   .root {
