@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import type { UndoItem } from '$lib/types'
   import { design, theme, undo } from '$lib/store'
+  import { compile } from '$lib/utils/props'
 
   export let onClose: any
   export let data: Record<string, any> = { attribute: { value: '' } }
@@ -9,14 +10,20 @@
   let oldValue: any
 
   onMount(() => {
-    oldValue = data[name].value
+    oldValue = data[name]
   })
 
   function submit() {
     const item: UndoItem = {
-      parent: data[name],
-      attribute: 'value',
+      parent: data,
+      attribute: name,
       value: oldValue,
+    }
+    const { value } = data[name]
+    if (value === '{}') {
+      data[name] = compile({})
+    } else if (value === '[]') {
+      data[name] = compile([])
     }
     $design = $design
     $theme = $theme
@@ -25,7 +32,7 @@
   }
 
   function cancel() {
-    data[name].value = oldValue
+    data[name] = oldValue
     onClose()
   }
 
