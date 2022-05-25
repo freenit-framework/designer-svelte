@@ -1,23 +1,37 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import type { UndoItem } from '$lib/types'
   import { design, theme, undo } from '$lib/store'
 
   export let onClose: any
   export let data: Record<string, any> = { attribute: { value: '' } }
   export let name = 'attribute'
-  let { value } = data[name]
+  let oldValue: any
+
+  onMount(() => {
+    oldValue = data[name].value
+  })
 
   function submit() {
     const item: UndoItem = {
       parent: data[name],
       attribute: 'value',
-      value: data[name].value,
+      value: oldValue,
     }
-    data[name].value = value
     $design = $design
     $theme = $theme
     $undo = [...$undo, item]
     onClose()
+  }
+
+  function cancel() {
+    data[name].value = oldValue
+    onClose()
+  }
+
+  function edit(event: any) {
+    data[name].value = event.target.value
+    $design = $design
   }
 </script>
 
@@ -25,10 +39,16 @@
 <div class="root">
   <form on:submit|preventDefault={submit}>
     <label for="value" class="label">{name}:</label>
-    <input required autofocus name="value" bind:value />
+    <input
+      required
+      autofocus
+      name="value"
+      on:input={edit}
+      value={data[name].value}
+    />
     <div class="buttons">
       <button class="button outline primary">OK</button>
-      <button class="button outline secondary" on:click={onClose}>
+      <button class="button outline secondary" on:click={cancel}>
         Cancel
       </button>
     </div>
