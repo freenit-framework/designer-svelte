@@ -11,7 +11,10 @@ const iconcomponents = Object.keys(icons).map((name) => ({
   data: icons[name],
   text: '',
   props: compile({}),
-  style: compile({}),
+  style: compile({
+    width: '30px',
+    height: '30px',
+  }),
   children: [
     {
       id: makeid(),
