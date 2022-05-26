@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store'
 import { compile } from './utils/props'
-import type { UndoItem } from '$lib/types'
+import type { Component, UndoItem } from '$lib/types'
 
-export const initialComponent = {
+export const initialComponent: Component = {
   id: null,
   name: 'root',
   component: '',

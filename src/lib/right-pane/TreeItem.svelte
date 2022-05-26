@@ -34,7 +34,10 @@
   }
 
   function select() {
-    $selected = data
+    $selected = {
+      ...data,
+      parent,
+    }
   }
 
   function remove() {

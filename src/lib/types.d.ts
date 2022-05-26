@@ -14,6 +14,7 @@ export interface Component {
   props: Record<any, any>
   style: Record<any, boolean | string | number | null>
   text: string
+  parent?: Component
 }
 
 export interface UndoItem {
