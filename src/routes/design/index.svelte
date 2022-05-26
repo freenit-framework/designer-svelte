@@ -87,5 +87,6 @@
     position: absolute;
     z-index: -999;
     width: 0;
+    opacity: 0;
   }
 </style>

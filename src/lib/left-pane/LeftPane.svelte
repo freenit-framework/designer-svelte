@@ -16,7 +16,7 @@
   let saveDownload: string | null = null
   let exportDownload: string | null = null
   let fileInput: any
-  let tab = 'icons'
+  let tab = 'components'
 
   function save() {
     saveDownload = null
