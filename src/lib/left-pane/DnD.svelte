@@ -1,7 +1,7 @@
 <script lang="ts">
   import { flip } from 'svelte/animate'
   import htmlnames from '$lib/components'
-  import { dragStart, dragEnd, drop } from '$lib/utils'
+  import { dragStart, dragEnd } from '$lib/utils'
 
   let search = ''
   const flipDurationMs = 300
