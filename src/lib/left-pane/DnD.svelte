@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { flip } from 'svelte/animate'
   import htmlnames from '$lib/components'
   import { dragStart, dragEnd } from '$lib/utils'
 
   let search = ''
-  const flipDurationMs = 300
 
   $: items = htmlnames.filter((item) =>
     item.name.toLowerCase().includes(search),
@@ -23,7 +21,6 @@
   {#each items as item (item.id)}
     <div
       class="element"
-      animate:flip={{ duration: flipDurationMs }}
       draggable="true"
       on:dragstart={dragStart(item)}
       on:dragend={dragEnd}
