@@ -21,7 +21,10 @@
         value: data[name],
       }
       $undo = [...$undo, item]
-      data[name] = compile({})
+      data.value = {
+        ...data.value,
+        [name]: compile({}),
+      }
     } else if (value === '[]') {
       const item: UndoItem = {
         parent: data,
@@ -29,7 +32,10 @@
         value: data[name],
       }
       $undo = [...$undo, item]
-      data[name] = compile([])
+      data.value = {
+        ...data.value,
+        [name]: compile([]),
+      }
     } else {
       const item: UndoItem = {
         parent: data.value,

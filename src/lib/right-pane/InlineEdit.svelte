@@ -5,7 +5,9 @@
   import { compile } from '$lib/utils/props'
 
   export let onClose: any
-  export let data: Record<string, any> = { attribute: { value: '' } }
+  export let data: Record<string, any> = {
+    attribute: { value: '', type: 'string' },
+  }
   export let name = 'attribute'
   let oldValue: any
 
@@ -46,12 +48,19 @@
 <div class="root">
   <form on:submit|preventDefault={submit}>
     <label for="value" class="label">{name}:</label>
+    <select name="type" bind:value={data[name].type}>
+      <option value="string">String</option>
+      <option value="number">Number</option>
+      <option value="boolean">Boolean</option>
+      <option value="color">Color</option>
+    </select>
     <input
       required
       autofocus
       name="value"
       on:input={edit}
       value={data[name].value}
+      type={data[name].type}
     />
     <div class="buttons">
       <button class="button outline primary">OK</button>
