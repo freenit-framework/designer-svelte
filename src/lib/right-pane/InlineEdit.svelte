@@ -6,7 +6,10 @@
 
   export let onClose: any
   export let data: Record<string, any> = {
-    attribute: { value: '', type: 'string' },
+    attribute: {
+      value: '',
+      type: 'string',
+    },
   }
   export let name = 'attribute'
   let oldValue: any

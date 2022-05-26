@@ -34,6 +34,15 @@ export const theme = writable(
     'font-family-mono': 'monaco, Consolas, Lucida Console, monospace',
   }),
 )
+theme.update((t) => {
+  for (const item in t.value) {
+    const value = t.value[item]
+    if (value.value.startsWith('#')) {
+      value.type = 'color'
+    }
+  }
+  return t
+})
 
 const undoArray: UndoItem[] = []
 const redoArray: UndoItem[] = []
