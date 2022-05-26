@@ -3,7 +3,7 @@ import { compile } from './utils/props'
 import type { Component, UndoItem } from '$lib/types'
 
 export const initialComponent: Component = {
-  id: null,
+  id: '',
   name: 'root',
   component: '',
   text: '',
@@ -14,6 +14,7 @@ export const initialComponent: Component = {
 
 export const design = writable({ ...initialComponent, id: 'root' })
 export const selected = writable({ ...initialComponent })
+export const parent = writable({ ...initialComponent })
 export const dnd = writable({ ...initialComponent })
 export const over = writable({ ...initialComponent })
 export const theme = writable(

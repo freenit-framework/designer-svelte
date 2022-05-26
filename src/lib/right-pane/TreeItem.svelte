@@ -1,6 +1,6 @@
 <script lang="ts">
   import { slide } from 'svelte/transition'
-  import { selected } from '$lib/store'
+  import { selected, parent as parentStore } from '$lib/store'
   import { dragStart, dragEnd, drop } from '$lib/utils'
   import type { Component, UndoItem } from '$lib/types'
   import DnDWrapper from './DnDWrapper.svelte'
@@ -34,10 +34,8 @@
   }
 
   function select() {
-    $selected = {
-      ...data,
-      parent,
-    }
+    $selected = data
+    $parentStore = parent
   }
 
   function remove() {

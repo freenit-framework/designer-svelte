@@ -6,38 +6,64 @@
   import LeftPane from '$lib/left-pane'
   import RightPane from '$lib/right-pane'
   import Preview from '$lib/preview'
-  import { undo, design, selected, initialComponent } from '$lib/store'
+  import { undo, design, selected, initialComponent, parent } from '$lib/store'
   import type { UndoItem } from '$lib/types'
+  import { changeIds } from '$lib/utils'
+
+  let input: any
+
+  function handlePaste(event: any) {
+    if (!Boolean($selected.id)) {
+      return
+    }
+    const { value } = event.target
+    if (value !== '') {
+      const last = $selected.children.length
+      const item: UndoItem = {
+        parent: $selected,
+        attribute: 'children',
+        value: [...$selected.children],
+      }
+      $undo = [...$undo, item]
+      const pasted = JSON.parse(value)
+      const changedData = changeIds(pasted)
+      $selected.children.push(changedData)
+      $selected = $selected.children[last]
+      $design = $design
+    }
+    input.blur()
+  }
 
   function handleKeyDown(event: any) {
     const { key, ctrlKey } = event
     if (key === 'Delete') {
-      if ($selected.id !== null) {
-        const { parent } = $selected
-        if (parent) {
-          const element = parent.children
-            .map((child) => child.id)
-            .indexOf($selected.id)
-          const item: UndoItem = {
-            parent: parent.children,
-            attribute: element,
-            value: $selected,
-          }
-          parent.children.splice(element, 1)
-          $undo = [...$undo, item]
-          $selected = { ...initialComponent }
-          $design = $design
+      if (Boolean($selected.id)) {
+        const element = $parent.children
+          .map((child) => child.id)
+          .indexOf($selected.id)
+        const item: UndoItem = {
+          parent: $parent.children,
+          attribute: element,
+          value: $selected,
         }
+        $parent.children.splice(element, 1)
+        $undo = [...$undo, item]
+        $selected = { ...initialComponent }
+        $design = $design
       }
     } else if (ctrlKey && key === 'c') {
-      console.log('copy')
+      const data = JSON.stringify($selected)
+      navigator.clipboard.writeText(data)
     } else if (ctrlKey && key === 'v') {
-      console.log('paste')
+      input.focus()
+      input.select()
+      document.execCommand('paste')
     }
   }
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
+<textarea bind:this={input} on:input={handlePaste} class="paste" />
 
 <section>
   <LeftPane />
@@ -51,5 +77,11 @@
     align-items: stretch;
     justify-content: center;
     height: 100vh;
+  }
+
+  .paste {
+    position: absolute;
+    z-index: -999;
+    width: 0;
   }
 </style>
