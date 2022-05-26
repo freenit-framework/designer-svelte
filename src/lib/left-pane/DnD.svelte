@@ -27,8 +27,6 @@
       draggable="true"
       on:dragstart={dragStart(item)}
       on:dragend={dragEnd}
-      on:drop={drop(item)}
-      ondragover="return false"
     >
       {item.name.toLowerCase()}
     </div>

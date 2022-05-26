@@ -1,5 +1,6 @@
 <script lang="ts">
   import DnD from './DnD.svelte'
+  import Icons from './Icons.svelte'
   import {
     exportCode,
     exportStyle,
@@ -15,6 +16,7 @@
   let saveDownload: string | null = null
   let exportDownload: string | null = null
   let fileInput: any
+  let tab = 'icons'
 
   function save() {
     saveDownload = null
@@ -62,14 +64,34 @@
       reader.readAsText(file)
     }
   }
+
+  function components() {
+    tab = 'components'
+  }
+
+  function icons() {
+    tab = 'icons'
+  }
 </script>
 
 <div class="root">
   <div class="panel">
-    <button class="button outline" disabled>Components</button>
-    <button class="button outline">Icons</button>
+    <button
+      class="button outline"
+      on:click={components}
+      disabled={tab === 'components'}
+    >
+      Components
+    </button>
+    <button class="button outline" on:click={icons} disabled={tab === 'icons'}>
+      Icons
+    </button>
   </div>
-  <DnD />
+  {#if tab === 'components'}
+    <DnD />
+  {:else}
+    <Icons />
+  {/if}
   <div class="buttons">
     <a
       class="button outline"
