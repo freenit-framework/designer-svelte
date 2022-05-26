@@ -11,6 +11,7 @@
   import { changeIds } from '$lib/utils'
 
   let input: any
+  let output: any
 
   function handlePaste(event: any) {
     if (!Boolean($selected.id)) {
@@ -52,8 +53,10 @@
         $design = $design
       }
     } else if (ctrlKey && key === 'c') {
-      const data = JSON.stringify($selected)
-      navigator.clipboard.writeText(data)
+      output.value = JSON.stringify($selected)
+      output.select()
+      document.execCommand('copy')
+      output.blur()
     } else if (ctrlKey && key === 'v') {
       input.focus()
       input.select()
@@ -64,6 +67,7 @@
 
 <svelte:window on:keydown={handleKeyDown} />
 <textarea bind:this={input} on:input={handlePaste} class="paste" />
+<textarea bind:this={output} on:input={handlePaste} class="paste" />
 
 <section>
   <LeftPane />
