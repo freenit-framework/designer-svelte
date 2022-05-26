@@ -25,12 +25,11 @@
     props: {},
     style: {},
   }
-  let hidden = true
   $: outline = $selected && $selected.id === data.id
-  $: icon = hidden ? 'v' : 'A'
+  $: icon = data.open ? 'A' : 'v'
 
   function toggleOpen() {
-    hidden = !hidden
+    data.open = !data.open
   }
 
   function select() {
@@ -69,7 +68,7 @@
       <div class="action" on:click|stopPropagation={remove}>x</div>
       <div class="action" on:click|stopPropagation={toggleOpen}>{icon}</div>
     </div>
-    <div class="content" class:hidden>
+    <div class="content" class:hidden={!data.open}>
       {#each data.children as item, index (item.id)}
         <svelte:self bind:data={item} bind:parent={data} {index} />
       {/each}
