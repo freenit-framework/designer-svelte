@@ -2,7 +2,7 @@ export function isSimple(data: any): boolean {
   if ([undefined, null].includes(data)) {
     return false
   }
-  const simple = ['number', 'boolean', 'string']
+  const simple = ['number', 'boolean', 'string', 'color']
   if (data.value && data.type) {
     return simple.includes(data.type)
   }
@@ -49,5 +49,3 @@ export const decompile = (data: Record<any, any>) => {
   })
   return props
 }
-
-
