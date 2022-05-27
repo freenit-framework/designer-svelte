@@ -1,23 +1,15 @@
 <script lang="ts">
   import DnD from './DnD.svelte'
   import Icons from './Icons.svelte'
-  import {
-    exportCode,
-    exportStyle,
-    exportText,
-    toJson,
-    toObject,
-    object2component,
-    setThemeProp,
-  } from '$lib/utils'
+  import Exporter from './Exporter.svelte'
+  import { toJson, object2component, setThemeProp } from '$lib/utils'
   import { design, theme } from '$lib/store'
-  import { decompile } from '$lib/utils/props'
   import { Base64 } from 'js-base64'
 
   let saveDownload: string | null = null
-  let exportDownload: string | null = null
   let fileInput: any
   let tab = 'components'
+  let showExport = false
 
   function save() {
     saveDownload = null
@@ -30,21 +22,7 @@
   }
 
   function exporter() {
-    exportDownload = null
-    const text = $design.children.map((c) => exportText(c)).join('')
-    const children = $design.children.map((c) => exportCode(c)).join('')
-    const style = $design.children.map((c) => exportStyle(c)).join('\n')
-    const scriptData = `\<script lang="ts"\>\n  const data = {${text}\n  }\n\<\/script\>`
-    const childrenData = `\n\n${children}\n`
-    let globalStyle = `  :global(:root) {\n`
-    const themeData = decompile($theme)
-    for (const prop of Object.keys(themeData)) {
-      globalStyle += `    --${prop}: ${themeData[prop]};\n`
-    }
-    globalStyle += '  }\n'
-    const styleData = `\<style\>\n${globalStyle}\n${style}\<\/style\>\n`
-    const code = `${scriptData}${childrenData}${styleData}`
-    exportDownload = `data:application/json;base64,${Base64.encode(code)}`
+    showExport = true
   }
 
   function openFile() {
@@ -56,7 +34,7 @@
       const [file] = event.target.files
       const reader = new FileReader()
       reader.onload = (e) => {
-        const data = JSON.parse(e.target.result)
+        const data = JSON.parse(`${e.target?.result}`)
         $design = object2component(data.design)
         $theme = data.theme
         for (const prop in data.theme) {
@@ -105,15 +83,7 @@
       Save
     </a>
     <button class="button outline primary" on:click={openFile}>Load</button>
-    <a
-      class="button outline"
-      on:mouseover={exporter}
-      on:focus={exporter}
-      href={exportDownload}
-      download="page.svelte"
-    >
-      Export
-    </a>
+    <button class="button outline" on:click={exporter}> Export </button>
   </div>
 </div>
 
@@ -124,6 +94,8 @@
   bind:this={fileInput}
   on:change={load}
 />
+
+<Exporter bind:open={showExport} />
 
 <style>
   .root {

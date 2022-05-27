@@ -1,4 +1,5 @@
 import { get } from 'svelte/store'
+import { Base64 } from 'js-base64'
 import type { Component, UndoItem } from '$lib/types'
 import { design, dnd, over, initialComponent, theme, undo } from '$lib/store'
 import * as components from '$lib/components/components'
@@ -156,4 +157,39 @@ export function exportCode(component: Component, prefix = ''): string {
 export function setThemeProp(key: string, value: string) {
   document.documentElement.style.setProperty(`--${key}`, value)
   theme.update((t) => ({ ...t, [key]: value }))
+}
+
+function exportSvelte(): string {
+  const designData = get(design)
+  const themeData = decompile(get(theme))
+  const text = designData.children.map((c) => exportText(c)).join('')
+  const children = designData.children.map((c) => exportCode(c)).join('')
+  const style = designData.children.map((c) => exportStyle(c)).join('\n')
+  const scriptData = `\<script lang="ts"\>\n  const data = {${text}\n  }\n\<\/script\>`
+  const childrenData = `\n\n${children}\n`
+  let globalStyle = `  :global(:root) {\n`
+  for (const prop of Object.keys(themeData)) {
+    globalStyle += `    --${prop}: ${themeData[prop]};\n`
+  }
+  globalStyle += '  }\n'
+  const styleData = `\<style\>\n${globalStyle}\n${style}\<\/style\>\n`
+  const code = `${scriptData}${childrenData}${styleData}`
+  return `data:application/json;base64,${Base64.encode(code)}`
+}
+
+function exportReact(): string {
+  const code = 'react'
+  return `data:application/json;base64,${Base64.encode(code)}`
+}
+
+function exportReactFunctional(): string {
+  const code = 'react functional'
+  return `data:application/json;base64,${Base64.encode(code)}`
+}
+
+export function exporter(framework: string): string {
+  if (framework === 'svelte') return exportSvelte()
+  else if (framework === 'react') return exportReact()
+  else if (framework === 'react functional') return exportReactFunctional()
+  throw new Error(`Invalid framework: ${framework}`)
 }

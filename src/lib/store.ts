@@ -49,3 +49,4 @@ const undoArray: UndoItem[] = []
 const redoArray: UndoItem[] = []
 export const undo = writable(undoArray)
 export const redo = writable(redoArray)
+export const framework = writable('svelte')
