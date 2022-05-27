@@ -126,8 +126,9 @@ export function exportProps(props: Record<string, any>): string {
 
 export function exportStyle(component: Component): string {
   let ret = `  .${component.id} {`
-  for (const s in component.style) {
-    ret += `\n    ${s}: ${component.style[s]};`
+  const styleData = decompile(component.style)
+  for (const s in styleData) {
+    ret += `\n    ${s}: ${styleData[s]};`
   }
   ret += '\n  }\n'
   ret += component.children.map((c) => exportStyle(c)).join()
@@ -147,7 +148,7 @@ export function exportCode(component: Component, prefix = ''): string {
   ret += `>\n`
   const children = component.children.map((c) => exportCode(c, `${prefix}  `))
   ret += children.join()
-  ret += `${prefix}  {data[${component.id}]}\n`
+  ret += `${prefix}  {data.${component.id}}\n`
   ret += `${prefix}</${element}>\n`
   return ret
 }

@@ -11,6 +11,7 @@
     setThemeProp,
   } from '$lib/utils'
   import { design, theme } from '$lib/store'
+  import { decompile } from '$lib/utils/props'
   import { Base64 } from 'js-base64'
 
   let saveDownload: string | null = null
@@ -36,8 +37,9 @@
     const scriptData = `\<script lang="ts"\>\n  const data = {${text}\n  }\n\<\/script\>`
     const childrenData = `\n\n${children}\n`
     let globalStyle = `  :global(:root) {\n`
-    for (const prop of Object.keys($theme)) {
-      globalStyle += `    --${prop}: ${$theme[prop]};\n`
+    const themeData = decompile($theme)
+    for (const prop of Object.keys(themeData)) {
+      globalStyle += `    --${prop}: ${themeData[prop]};\n`
     }
     globalStyle += '  }\n'
     const styleData = `\<style\>\n${globalStyle}\n${style}\<\/style\>\n`
