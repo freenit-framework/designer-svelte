@@ -50,7 +50,12 @@
       <label for="react functional">React (functional)</label>
     </div>
   </div>
-  <a href={exportData} class="button outline primary" download={exportType}>
+  <a
+    href={exportData}
+    class="button outline primary"
+    download={exportType}
+    on:click={cancel}
+  >
     Export
   </a>
   <button class="button outline" on:click={cancel}>Cancel</button>

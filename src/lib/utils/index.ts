@@ -95,7 +95,7 @@ export function dragLeave() {
   over.set({ ...initialComponent })
 }
 
-export function toJson(component: Component) {
+export function toJson(component: Component): Record<any, any> {
   const { id, name, props, style, children, text } = component
   return {
     id,
@@ -185,13 +185,41 @@ function exportSvelte(): string {
   return `data:application/json;base64,${Base64.encode(code)}`
 }
 
+function exportReactCode(component: Component, indent: number): string {
+  const element = component.name.toLowerCase()
+  let code = ' '.repeat(indent)
+  code += `<${element} class="${component.id}"`
+  code += exportProps(decompile(component.props))
+  code += `>\n`
+  code += component.children
+    .map((child) => exportReactCode(child, indent + 2))
+    .join('')
+  code += ' '.repeat(indent)
+  code += `</${element}>\n`
+  return code
+}
+
 function exportReact(): string {
-  const code = 'react'
+  const designData = get(design)
+  let code = 'import React from "react"\n\n'
+  code += 'class Page extends React.Component {\n'
+  code += '  render() {\n'
+  const childrenCode = designData.children
+    .map((child) => exportReactCode(child, 4))
+    .join('')
+  console.log(childrenCode)
+  code += childrenCode
+  code += '  }\n'
+  code += '}\n\n'
+  code += 'export default Page'
   return `data:application/json;base64,${Base64.encode(code)}`
 }
 
 function exportReactFunctional(): string {
-  const code = 'react functional'
+  let code = 'import React from "react"\n\n'
+  code += 'function Page(props) {\n'
+  code += '}\n\n'
+  code += 'export default Page'
   return `data:application/json;base64,${Base64.encode(code)}`
 }
 
