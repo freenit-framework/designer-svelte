@@ -13,9 +13,11 @@
   }
   export let name = 'attribute'
   let oldValue: any
+  let oldType: any
 
   onMount(() => {
-    oldValue = data[name]
+    oldValue = data[name].value
+    oldType = data[name].type
   })
 
   function submit() {
@@ -37,7 +39,8 @@
   }
 
   function cancel() {
-    data[name] = oldValue
+    data[name].value = oldValue
+    data[name].type = oldType
     onClose()
   }
 

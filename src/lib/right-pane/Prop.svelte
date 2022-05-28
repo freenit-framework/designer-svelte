@@ -59,7 +59,7 @@
 {#if Boolean(name) && data[name] !== undefined}
   <div class="root">
     {#if editing}
-      <InlineEdit {data} bind:name onClose={closeEdit} />
+      <InlineEdit bind:data bind:name onClose={closeEdit} />
     {:else if isSimple(data[name])}
       <span
         on:mouseover={hoverRemove}

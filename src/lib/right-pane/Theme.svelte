@@ -7,7 +7,10 @@
   let editing: string | null = null
 
   function edit(prop: string) {
-    editing = prop
+    function handler() {
+      editing = prop
+    }
+    return handler
   }
 
   function change() {
@@ -21,7 +24,7 @@
 <div class="root">
   {#each Object.keys($theme.value) as prop}
     {#if editing === prop}
-      <InlineEdit data={$theme.value} name={prop} onClose={change} />
+      <InlineEdit bind:data={$theme.value} name={prop} onClose={change} />
     {:else}
       <div on:click={edit(prop)}>{prop}: {$theme.value[prop].value}</div>
     {/if}
