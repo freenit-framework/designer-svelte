@@ -1,7 +1,15 @@
 import { get } from 'svelte/store'
 import { Base64 } from 'js-base64'
 import type { Component, UndoItem } from '$lib/types'
-import { design, dnd, over, initialComponent, theme, undo } from '$lib/store'
+import {
+  design,
+  dnd,
+  over,
+  initialComponent,
+  theme,
+  undo,
+  selected,
+} from '$lib/store'
 import * as components from '$lib/components/components'
 import { decompile } from './props'
 
@@ -192,4 +200,18 @@ export function exporter(framework: string): string {
   else if (framework === 'react') return exportReact()
   else if (framework === 'react functional') return exportReactFunctional()
   throw new Error(`Invalid framework: ${framework}`)
+}
+
+export function findSelected(component: Component): boolean {
+  const selectedData = get(selected)
+  if (component.id === selectedData.id) {
+    component.open = true
+    return true
+  }
+  const actives = component.children.map((child) => findSelected(child))
+  if (actives.includes(true)) {
+    component.open = true
+    return true
+  }
+  return false
 }

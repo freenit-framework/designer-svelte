@@ -2,8 +2,17 @@
   import Tree from './Tree.svelte'
   import Props from './Props.svelte'
   import Theme from './Theme.svelte'
-  import { mdiRedo, mdiUndo, mdiCellphone, mdiTablet, mdiLaptop } from '@mdi/js'
+  import {
+    mdiRedo,
+    mdiUndo,
+    mdiCellphone,
+    mdiTablet,
+    mdiLaptop,
+    mdiSelectSearch,
+  } from '@mdi/js'
   import { undo, redo } from '$lib/undo'
+  import { findSelected } from '$lib/utils'
+  import { design } from '$lib/store'
 
   let tab = 'props'
 
@@ -26,6 +35,11 @@
   function theme() {
     tab = 'theme'
   }
+
+  function search() {
+    findSelected($design)
+    $design = $design
+  }
 </script>
 
 <div class="root">
@@ -44,6 +58,9 @@
       </svg>
       <svg class="icon" on:click={redo}>
         <path d={mdiRedo} />
+      </svg>
+      <svg class="icon" on:click={search}>
+        <path d={mdiSelectSearch} />
       </svg>
     </div>
     <div class="content">

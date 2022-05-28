@@ -13,7 +13,6 @@
 <style>
   .modal_background {
     position: fixed;
-    z-index: 1;
     top: 0;
     left: 0;
     width: 100vw;
@@ -22,7 +21,6 @@
 
   .modal {
     position: fixed;
-    z-index: 2;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
