@@ -10,4 +10,4 @@ echo "Frontend"
 echo "========"
 cd "${PROJECT_ROOT}"
 rm -rf build
-/usr/bin/npm run build
+npm run build
