@@ -19,7 +19,7 @@ function exportSvelte(): string {
     globalStyle += `    --${prop}: ${themeData[prop]};\n`
   }
   globalStyle += '  }\n'
-  const styleData = `\<style\>\n${globalStyle}\n${style}\<\/style\>\n`
+  const styleData = `\<style\>\n${globalStyle}${style}\<\/style\>\n`
   const code = `${scriptData}${childrenData}${styleData}`
   return `data:application/json;base64,${Base64.encode(code)}`
 }
@@ -38,6 +38,10 @@ function exportReactCode(component: Component, indent: number): string {
   code += component.children
     .map((child) => exportReactCode(child, indent + 2))
     .join('')
+  if (component.text !== '') {
+    code += ' '.repeat(indent + 2)
+    code += `{data.${component.id}}\n`
+  }
   code += ' '.repeat(indent)
   code += `</${element}>\n`
   return code
@@ -83,13 +87,6 @@ function exportReactFunctional(): string {
   return `data:application/json;base64,${Base64.encode(code)}`
 }
 
-export function exporter(framework: string): string {
-  if (framework === 'svelte') return exportSvelte()
-  else if (framework === 'react') return exportReact()
-  else if (framework === 'react functional') return exportReactFunctional()
-  throw new Error(`Invalid framework: ${framework}`)
-}
-
 export function exportProps(props: Record<string, any>): string {
   let ret = ''
   for (const prop in props) {
@@ -99,7 +96,7 @@ export function exportProps(props: Record<string, any>): string {
 }
 
 export function exportStyle(component: Component): string {
-  let ret = `  .${component.id} {`
+  let ret = `\n  .${component.id} {`
   const styleData = decompile(component.style)
   for (const s in styleData) {
     ret += `\n    ${s}: ${styleData[s]};`
@@ -110,6 +107,9 @@ export function exportStyle(component: Component): string {
 }
 
 export function exportText(component: Component, indent = 4): string {
+  if (component.text === '') {
+    return ''
+  }
   let ret = '\n'
   ret += ' '.repeat(indent)
   ret += `${component.id}: "${component.text}",`
@@ -126,7 +126,16 @@ export function exportSvelteCode(component: Component, prefix = ''): string {
     exportSvelteCode(c, `${prefix}  `),
   )
   ret += children.join()
-  ret += `${prefix}  {data.${component.id}}\n`
+  if (component.text !== '') {
+    ret += `${prefix}  {data.${component.id}}\n`
+  }
   ret += `${prefix}</${element}>\n`
   return ret
+}
+
+export function exporter(framework: string): string {
+  if (framework === 'svelte') return exportSvelte()
+  else if (framework === 'react') return exportReact()
+  else if (framework === 'react functional') return exportReactFunctional()
+  throw new Error(`Invalid framework: ${framework}`)
 }

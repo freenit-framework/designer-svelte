@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-  <title>Freenit Designer for Svelte</title>
+  <title>Freenit Designer</title>
 </svelte:head>
 
 <main>
